@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width" />
+		<title>DAP Clone</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+		<link rel="stylesheet" href="styles.css" />
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+		<script src="script.js" type="text/javascript" defer></script>
+	</head>
+	<body>
+		<div class="annotation-area" oncontextmenu="return false">
+			<div class="multiselect"></div>
+			<img class="my-image" />
+		</div>
+		<div class="controls-container">
+			<i class="fa-solid fa-arrow-pointer control-active cursor" data-tooltip="Select segments Toggle draw [A]"></i>
+			<i class="fa-solid fa-vector-square create-new" data-tooltip="Draw segments. Toggle select [A]"></i>
+			<hr />
+			<i class="fa-solid fa-tag select-label-btn disabled" data-tooltip="Select label. [1, 2, 3, ..., 9, 0] > [Q, W, E, ..., O, P]"></i>
+			<hr />
+			<span class="current-zoom">250%</span>
+			<i class="fa-solid fa-magnifying-glass-plus zoom-in-btn" data-tooltip="Zoom in. [Scroll in]"></i>
+			<i class="fa-solid fa-magnifying-glass-minus zoom-out-btn" data-tooltip="Zoom out. [Scroll out]"></i>
+			<i class="fa-solid fa-magnifying-glass reset-zoom-btn" data-tooltip="Reset zoom. [S]"></i>
+			<!-- <i class="fa-solid fa-gear settings-btn" data-tooltip="Configure labels and tags"> </i> -->
+		</div>
+		<div class="side-bar">
+			<div class="side-bar-header">
+				<button>Stop Working</button>
+				<button id="done-btn">Done</button>
+				<h2>Segments:</h2>
+				<h2 class="count">0</h2>
+				<br />
+				<i class="fa-solid fa-eye-slash hide-btn hide-all"></i>
+			</div>
+			<div class="side-bar-body"></div>
+		</div>
+	</body>
+</html>

@@ -24,7 +24,7 @@ hr {
 	font-family: sans-serif;
 	white-space: nowrap;
 	padding: 0.5rem;
-	background-color: hsla(250, 10%, 80%, 0.95);
+	background-color: hsla(250, 10%, 80%, 0.65);
 	border-radius: 0.5rem;
 
 	box-shadow: 0px 0 5px 1px hsla(0, 0%, 0%, 0.3);
@@ -62,7 +62,7 @@ hr {
 
 .controls-container,
 .side-bar {
-	--header-hight: 20%;
+	--header-hight: 25%;
 	width: 20%;
 	height: 100%;
 	position: fixed;
@@ -95,10 +95,12 @@ hr {
 	position: relative;
 }
 
-.controls-container i.control-active,
-.controls-container i:hover:not(.disabled) {
+i.clickable.tab-active,
+i.clickable.control-active,
+i.clickable:hover:not(.disabled) {
 	cursor: pointer;
-	box-shadow: 0 0 5px 0 hsla(250, 80%, 50%, 0.99);
+	box-shadow: 0 3px 5px 0 hsla(250, 80%, 60%, 0.5);
+	transform: scale(1.1);
 }
 
 .disabled {
@@ -119,7 +121,15 @@ hr {
 	cursor: pointer;
 }
 
-.side-bar-body {
+.side-bar-header .tab-btn {
+	width: 80%;
+	font-size: 1.25rem;
+	text-align: center;
+	padding-block: 0.5rem;
+}
+
+.shortcuts-container,
+.rect-info-container {
 	display: flex;
 	flex-direction: column;
 	height: calc(100% - var(--header-hight, 20%));
@@ -130,7 +140,7 @@ hr {
 	padding-top: 1rem;
 }
 
-.side-bar-item {
+.rect-info {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -141,7 +151,7 @@ hr {
 	cursor: pointer;
 }
 
-.side-bar-item.hidden {
+.rect-info.hidden {
 	background-color: hsla(250, 3%, 53%, 0.99);
 	opacity: 0.5;
 }
@@ -150,12 +160,27 @@ hr {
 	cursor: pointer;
 }
 
-.side-bar-item::before {
+.rect-info::before {
 	content: attr(data-status);
 }
 
-.side-bar-item.active {
+.rect-info.active {
 	border: 3px solid hsl(var(--border-hue, 0), 100%, 45%);
+}
+
+.shortcut {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding-inline: 0.5rem;
+	font-size: 0.8rem;
+}
+
+.shortcut > .key {
+	white-space: nowrap;
+	background-color: hsl(250, 3%, 70%);
+	padding: 0.2rem;
+	border-radius: 0.25rem;
 }
 
 .annotation-area {
@@ -200,12 +225,12 @@ hr {
 	z-index: 100;
 }
 
-.side-bar-item.active[data-label],
+.rect-info.active[data-label],
 .rect[data-label] {
 	--border-hue: 40;
 }
 
-.side-bar-item.active[data-label][data-tag],
+.rect-info.active[data-label][data-tag],
 .rect[data-label][data-tag] {
 	--border-hue: 128;
 }

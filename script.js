@@ -1,6 +1,6 @@
 const MIN_RECT_SIZE = 5;
 
-const LABELS_AND_TAGS = { Product: ["No Rotation", "Has Rotation"], "Don't care": [], Color: ["Red", "Green", "Blue", "Magenta", "Yellow"] };
+const LABELS_AND_TAGS = { Product: ["No Rotation", "Has Rotation"], "Don't care": [], Car: ["Red", "Green", "Blue"] };
 
 $(".my-image").on("dragstart", () => false);
 // $(".my-image").attr("src", "ProfilePic.jpg");
@@ -38,7 +38,7 @@ $(".annotation-area").on("wheel", function (e) {
 	$(".current-zoom").text(`${parseInt(currentZoom * 100)}%`);
 });
 
-$(document).on("click", ".side-bar-item", e => {
+$(document).on("click", ".rect-info", e => {
 	$(".active").removeClass("active").trigger("classChange");
 	$(".resize").remove();
 	activateRect(e.target);
@@ -257,34 +257,34 @@ function createRect({ x, y, width, height }) {
 	rect.css({ "--x": x, "--y": y, "--width": width, "--height": height });
 	$(".annotation-area").append(rect);
 	const sideItem = $(
-		`<div class="side-bar-item" data-id=${id} data-status="Unlabeled" oncontextmenu="return false"><i class="fa-solid fa-eye-slash hide-btn"></i></div>`
+		`<div class="rect-info" data-id=${id} data-status="Unlabeled" oncontextmenu="return false"><i class="fa-solid fa-eye-slash hide-btn"></i></div>`
 	);
-	$(".side-bar-body").append(sideItem);
+	$(".rect-info-container").append(sideItem);
 	$(".count").text($(".rect").length);
 }
 
 $(document).on("click", ".hide-btn", e => {
 	if ($(e.target).hasClass("hide-all")) {
 		$(".rect").hide();
-		$(".side-bar-item").addClass("hidden");
+		$(".rect-info").addClass("hidden");
 		$(e.target).removeClass("hide-all");
 		$(e.target).addClass("show-all");
 		return;
 	}
 	if ($(e.target).hasClass("show-all")) {
 		$(".rect").show();
-		$(".side-bar-item").removeClass("hidden");
+		$(".rect-info").removeClass("hidden");
 		$(e.target).removeClass("show-all");
 		$(e.target).addClass("hide-all");
 		return;
 	}
-	if ($(e.target).parent().is(".side-bar-item.hidden")) {
+	if ($(e.target).parent().is(".rect-info.hidden")) {
 		const id = $(e.target).parent().attr("data-id");
 		$(`.rect[data-id="${id}"]`).show();
 		$(e.target).parent().removeClass("hidden");
 		return;
 	}
-	if ($(e.target).parent().is(".side-bar-item:not(.hidden)")) {
+	if ($(e.target).parent().is(".rect-info:not(.hidden)")) {
 		const id = $(e.target).parent().attr("data-id");
 		$(`.rect[data-id="${id}"]`).hide();
 		$(e.target).parent().addClass("hidden");
@@ -348,20 +348,27 @@ function focusPreviousRect() {
 	focusOnRect();
 }
 
-const labelKeyMappingShortcuts = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
-const tagKeyMappingShortcuts = ["q", "w", "e", "r", "t", "z", "u", "i", "o", "p", "y"];
-const shortcutKeyMapping = {};
-let i = 0;
+const shortcutKeyMapping = [];
 Object.keys(LABELS_AND_TAGS).forEach(label => {
 	if (LABELS_AND_TAGS[label].length > 0) {
 		LABELS_AND_TAGS[label].forEach(tag => {
-			shortcutKeyMapping[i] = { label, tag };
-			i++;
+			shortcutKeyMapping.push({ label, tag });
+			createShortcutTooltip({ label, tag }, shortcutKeyMapping.length);
 		});
-	} else shortcutKeyMapping[i] = { label };
-	i++;
+	} else {
+		shortcutKeyMapping.push({ label });
+		createShortcutTooltip({ label }, shortcutKeyMapping.length);
+	}
 });
-console.log(shortcutKeyMapping);
+
+function createShortcutTooltip({ label, tag }, key) {
+	if (key > 9) return;
+	const shortcut = $(`<div class="shortcut">
+	<p class="key">${key}</p>
+	<p>${label} ${tag ? `- ${tag}` : ""}</p>
+	</div>`);
+	$(".shortcuts-container").append(shortcut);
+}
 
 $(document).on("keydown", e => {
 	if (e.key.toLowerCase() === "a") $(".cursor, .create-new").toggleClass("control-active");
@@ -376,38 +383,17 @@ $(document).on("keydown", e => {
 	if (e.key === "ArrowUp") focusPreviousRect();
 	if (e.key === "Escape") $(".active").removeClass("active");
 
-	if (labelKeyMappingShortcuts.indexOf(e.key.toLocaleLowerCase()) !== -1) addLabel(labelKeyMappingShortcuts.indexOf(e.key.toLocaleLowerCase()));
-	if (tagKeyMappingShortcuts.indexOf(e.key.toLocaleLowerCase()) !== -1) addTag(tagKeyMappingShortcuts.indexOf(e.key.toLocaleLowerCase()));
+	if (shortcutKeyMapping[parseInt(e.key) - 1]) addLabelTag(shortcutKeyMapping[parseInt(e.key) - 1]);
 });
 
-function addLabel(index) {
+function addLabelTag({ label, tag }) {
 	const activeRects = $(".active");
 	if (activateRect.length < 1) return;
-	const key = Object.keys(LABELS_AND_TAGS)[index];
-	if (!key) return;
 	activeRects.removeAttr("data-tag");
 	activeRects.removeAttr("data-label");
-	activeRects.attr("data-label", key);
-	activeRects.attr("data-status", `${key} - Tag Missing`);
-	if (LABELS_AND_TAGS[key].length < 1) {
-		activeRects.attr("data-tag", "no-tag");
-		activeRects.attr("data-status", key);
-	}
-}
-
-function addTag(index) {
-	const activeRects = $(".active");
-	if (activateRect.length < 1) return;
-	activeRects
-		.filter(function () {
-			return LABELS_AND_TAGS[this.dataset.label].length > 0;
-		})
-		.each(function () {
-			if (LABELS_AND_TAGS[this.dataset.label][index]) {
-				this.dataset.tag = LABELS_AND_TAGS[this.dataset.label][index];
-				this.dataset.status = `${this.dataset.label} - ${LABELS_AND_TAGS[this.dataset.label][index]}`;
-			}
-		});
+	activeRects.attr("data-label", label);
+	activeRects.attr("data-tag", tag ? tag : "no-tag");
+	activeRects.attr("data-status", `${label} ${tag ? `- ${tag}` : ""}`);
 }
 
 $("#done-btn").on("click", () => {
@@ -461,7 +447,7 @@ $(".select-label-btn").on("click", e => {
 const contextMenu = {
 	open: location => {
 		const menu = $(`<div class="context-menu" style="--x:${location.x}; --y:${location.y}" oncontextmenu="return false"></div>`);
-		Object.keys(LABELS_AND_TAGS).forEach((label, labelIndex) => {
+		Object.keys(LABELS_AND_TAGS).forEach(label => {
 			const menuItem = $(`<div class="menu-item"><div>${label}</div></div>`);
 			if (LABELS_AND_TAGS[label].length > 0) {
 				const submenu = $('<div class="submenu" style="display:none;"></div>');
@@ -472,15 +458,14 @@ const contextMenu = {
 					submenu.show();
 				});
 				menuItem.on("mouseleave", () => (t = setTimeout(() => submenu.hide(), 100)));
-				LABELS_AND_TAGS[label].forEach((tag, tagIndex) => {
+				LABELS_AND_TAGS[label].forEach(tag => {
 					const subItem = $(`<div class="subitem">${tag}</div>`);
 					submenu.append(subItem);
 					subItem.on("mouseup", () => {
-						addLabel(labelIndex);
-						addTag(tagIndex);
+						addLabelTag({ label, tag });
 					});
 				});
-			} else menuItem.on("mouseup", () => addLabel(labelIndex));
+			} else menuItem.on("mouseup", () => addLabelTag({ label }));
 
 			menu.append(menuItem);
 		});
@@ -506,6 +491,15 @@ $(".zoom-out-btn").on("click", () => {
 });
 
 $(".reset-zoom-btn").on("click", resetZoonAndPan);
+
+$(".tab-btn").on("click", e => {
+	$(".tab-active").removeClass("tab-active");
+	$(e.target).addClass("tab-active");
+	$(`.${e.target.dataset.tabShow}`).show();
+	$(`.${e.target.dataset.tabHide}`).hide();
+});
+
+$("#stop-btn").on("click", () => close());
 
 function uuidV4() {
 	return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>

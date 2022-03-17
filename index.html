@@ -16,27 +16,82 @@
 			<img class="my-image" />
 		</div>
 		<div class="controls-container">
-			<i class="fa-solid fa-arrow-pointer control-active cursor" data-tooltip="Select segments Toggle draw [A]"></i>
-			<i class="fa-solid fa-vector-square create-new" data-tooltip="Draw segments. Toggle select [A]"></i>
+			<i class="clickable fa-solid fa-arrow-pointer cursor" data-tooltip="Select segments Toggle draw [A]"></i>
+			<i class="clickable fa-solid fa-vector-square control-active create-new" data-tooltip="Draw segments. Toggle select [A]"></i>
 			<hr />
-			<i class="fa-solid fa-tag select-label-btn disabled" data-tooltip="Select label. [1, 2, 3, ..., 9, 0] > [Q, W, E, ..., O, P]"></i>
+			<i class="clickable fa-solid fa-tag select-label-btn disabled" data-tooltip="Select label. [1, 2, 3, ..., 8, 9]"></i>
 			<hr />
-			<span class="current-zoom">250%</span>
-			<i class="fa-solid fa-magnifying-glass-plus zoom-in-btn" data-tooltip="Zoom in. [Scroll in]"></i>
-			<i class="fa-solid fa-magnifying-glass-minus zoom-out-btn" data-tooltip="Zoom out. [Scroll out]"></i>
-			<i class="fa-solid fa-magnifying-glass reset-zoom-btn" data-tooltip="Reset zoom. [S]"></i>
+			<i class="current-zoom" data-tooltip="Current zoom">250%</i>
+			<i class="clickable fa-solid fa-magnifying-glass-plus zoom-in-btn" data-tooltip="Zoom in. [Scroll in]"></i>
+			<i class="clickable fa-solid fa-magnifying-glass-minus zoom-out-btn" data-tooltip="Zoom out. [Scroll out]"></i>
+			<i class="clickable fa-solid fa-magnifying-glass reset-zoom-btn" data-tooltip="Reset zoom. [S]"></i>
 			<!-- <i class="fa-solid fa-gear settings-btn" data-tooltip="Configure labels and tags"> </i> -->
 		</div>
 		<div class="side-bar">
 			<div class="side-bar-header">
-				<button>Stop Working</button>
+				<button id="stop-btn">Stop Working</button>
 				<button id="done-btn">Done</button>
 				<h2>Segments:</h2>
 				<h2 class="count">0</h2>
 				<br />
 				<i class="fa-solid fa-eye-slash hide-btn hide-all"></i>
+				<i
+					class="clickable fa-solid fa-layer-group tab-btn tab-active"
+					data-tab-show="rect-info-container"
+					data-tab-hide="shortcuts-container"
+				></i>
+				<i class="clickable fa-regular fa-keyboard tab-btn" data-tab-show="shortcuts-container" data-tab-hide="rect-info-container"></i>
 			</div>
-			<div class="side-bar-body"></div>
+			<div class="rect-info-container"></div>
+			<div class="shortcuts-container" style="display: none">
+				<div class="shortcut">
+					<p class="key">A</p>
+					<p>Toggle between multiselect and rectangle creation</p>
+				</div>
+				<div class="shortcut">
+					<p class="key">S</p>
+					<p>Reset zoom level and position</p>
+				</div>
+				<div class="shortcut">
+					<p class="key">D</p>
+					/
+					<p class="key">Delete</p>
+					<p>Delete selected box/es</p>
+				</div>
+				<div class="shortcut">
+					<p class="key">Esc</p>
+					<p>Deselect all selected boxes</p>
+				</div>
+				<div class="shortcut">
+					<p class="key">Left Click</p>
+					<p>Select / deselect box</p>
+				</div>
+				<div class="shortcut">
+					<p class="key">Right Click</p>
+					<p>If click is on selected box/es, opens label menu</p>
+				</div>
+				<div class="shortcut">
+					<p class="key">Left Click Drag</p>
+					<p>Multiselect / create box</p>
+				</div>
+				<div class="shortcut">
+					<p class="key">Right Click Drag</p>
+					<p>Pan Image</p>
+				</div>
+				<div class="shortcut">
+					<p class="key">Scroll Wheel</p>
+					<p>Zoom image</p>
+				</div>
+				<div class="shortcut">
+					<p class="key">Arrow Up</p>
+					<p>Select previous box</p>
+				</div>
+				<div class="shortcut">
+					<p class="key">Arrow Down</p>
+					<p>Select next box</p>
+				</div>
+				<hr />
+			</div>
 		</div>
 	</body>
 </html>

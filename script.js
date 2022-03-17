@@ -365,10 +365,25 @@ function createShortcutTooltip({ label, tag }, key) {
 	if (key > 9) return;
 	const shortcut = $(`<div class="shortcut">
 	<p class="key">${key}</p>
-	<p>${label} ${tag ? `- ${tag}` : ""}</p>
+	<p>${label}${tag ? ` - ${tag}` : ""}</p>
+	<input type="color" class="box-color-picker" value="#14eb31"/>
 	</div>`);
 	$(".shortcuts-container").append(shortcut);
+	const customStyle = $(
+		`<style data-custom-style="${label}${tag ? ` - ${tag}` : ""}">
+		[data-status="${label}${tag ? ` - ${tag}` : ""}"] {
+			border-color: #14eb31;
+		}
+		</style>`
+	);
+	$(document.body).append(customStyle);
 }
+
+$(document).on("input", ".box-color-picker", e => {
+	const selector = `[data-custom-style="${$(e.target).prev("p").text()}"]`;
+	const status = `[data-status="${$(e.target).prev("p").text()}"]`;
+	$(selector).html(`${status}{border-color: ${$(e.target).val()};}`);
+});
 
 $(document).on("keydown", e => {
 	if (e.key.toLowerCase() === "a") $(".cursor, .create-new").toggleClass("control-active");
@@ -389,11 +404,9 @@ $(document).on("keydown", e => {
 function addLabelTag({ label, tag }) {
 	const activeRects = $(".active");
 	if (activateRect.length < 1) return;
-	activeRects.removeAttr("data-tag");
-	activeRects.removeAttr("data-label");
 	activeRects.attr("data-label", label);
 	activeRects.attr("data-tag", tag ? tag : "no-tag");
-	activeRects.attr("data-status", `${label} ${tag ? `- ${tag}` : ""}`);
+	activeRects.attr("data-status", `${label}${tag ? ` - ${tag}` : ""}`);
 }
 
 $("#done-btn").on("click", () => {
@@ -401,7 +414,7 @@ $("#done-btn").on("click", () => {
 	const unlabeled = rects.filter(function () {
 		return this.dataset.label === undefined || this.dataset.tag === undefined;
 	});
-	if (unlabeled.length > 0) return alert("Please annotate all segments\n Every segment has to be green.");
+	if (unlabeled.length > 0) return alert("Please label all segments");
 	const result = [];
 	rects.each(function () {
 		result.push({

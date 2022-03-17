@@ -381,7 +381,7 @@ $(document).on("keydown", e => {
 	if (e.key.toLowerCase() === "f") focusOnRect();
 	if (e.key === "ArrowDown") focusNextRect();
 	if (e.key === "ArrowUp") focusPreviousRect();
-	if (e.key === "Escape") $(".active").removeClass("active");
+	if (e.key === "Escape") $(".active").removeClass("active").trigger("classChange");
 
 	if (shortcutKeyMapping[parseInt(e.key) - 1]) addLabelTag(shortcutKeyMapping[parseInt(e.key) - 1]);
 });

@@ -184,8 +184,8 @@ i.clickable:hover:not(.disabled) {
 	border-radius: 0.25rem;
 }
 
-.shortcut > :nth-child(2) {
-	flex-grow: 1;
+.shortcut > input {
+	margin-left: auto;
 }
 
 .annotation-area {

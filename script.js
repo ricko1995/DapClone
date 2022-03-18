@@ -364,9 +364,9 @@ Object.keys(LABELS_AND_TAGS).forEach(label => {
 function createShortcutTooltip({ label, tag }, key) {
 	if (key > 9) return;
 	const shortcut = $(`<div class="shortcut">
-	<p class="key">${key}</p>
-	<p>${label}${tag ? ` - ${tag}` : ""}</p>
-	<input type="color" class="box-color-picker" value="#14eb31"/>
+		<p class="key">${key}</p>
+		<p>${label}${tag ? ` - ${tag}` : ""}</p>
+		<input type="color" class="box-color-picker" value="#14eb31"/>
 	</div>`);
 	$(".shortcuts-container").append(shortcut);
 	const customStyle = $(
